@@ -19,6 +19,9 @@ A simplified framework for creating modular Discord bots
 	* Supports basic one-line help for the entire bot or detailed help for a specific command
 	* Commands are not forced to have either help entry, or both, allowing commands to be hidden or to only have a detailed help entry
 * Permits any number of prefixes of any kind, including word-based prefixes and character-based prefixes
+	* Automatically adds your bot account's mention as a prefix
+	* Also adds the bot's process ID as a prefix to differentiate between prefixes (eg. `bpid2294 ` as a prefix)
+		* (Configurable in config.py)
 * Fast: Less than 30ms (typical) between message received and command triggered 
 * Custom logging designed to be fast, with low overhead
 
@@ -44,6 +47,7 @@ Before enabling the message logging module, it is *very highly recommended* that
 bot development terms of service, as there are precautions and terms that must be taken when logging user messages.
 [Link](https://discordapp.com/developers/docs/legal)
  
+
 ## Writing modules
 The main flexibility of the bot comes with respect to its modules. Modules are added by creating a new file in the
 `modules/` directory with a name of your choice and adding relevant code to the file. After creating the module, it must

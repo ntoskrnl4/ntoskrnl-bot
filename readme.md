@@ -4,7 +4,11 @@ A simplified framework for creating modular Discord bots
 ---
 ## Features
 * Fully modular design - all user code goes into modules in the `modules/` directory
-* No defined arguments or names for commands - unlike discord.py's Bot extension, functions' names have no relation to what triggers them
+* No defined arguments or names for commands - unlike discord.py's Bot extension, functions' names have no relation 
+to what triggers them, and arguments aren't defined in the function's signature, allowing code to customize parsing 
+of their command.
+* An unlimited number of event handlers can be registered, in opposition to a single on_message event (or whatever) in 
+the regular `discord.Client`
 * Not limited to commands
 	* Currently supports user code for the following Discord events:
 		* `@client.command()` (command is run)
@@ -20,8 +24,8 @@ A simplified framework for creating modular Discord bots
 	* Commands are not forced to have either help entry, or both, allowing commands to be hidden or to only have a detailed help entry
 * Permits any number of prefixes of any kind, including word-based prefixes and character-based prefixes
 	* Automatically adds your bot account's mention as a prefix
-	* Also adds the bot's process ID as a prefix to differentiate between prefixes (eg. `bpid2294 ` as a prefix)
-		* (Configurable in config.py)
+	* Also adds the bot's process ID as a prefix to differentiate between instances (eg. `bpid2294 ` as a prefix) 
+	(Configurable in config.py)
 * Fast: Less than 30ms (typical) between message received and command triggered 
 * Custom logging designed to be fast, with low overhead
 
@@ -55,7 +59,7 @@ The main flexibility of the bot comes with respect to its modules. Modules are a
 
 Note: It is highly recommended that the user become familiar with the discord.py primary API page, as it is useful when 
 developing modules:
-https://discordpy.readthedocs.io/en/rewrite/api.html
+https://discordpy.readthedocs.io/en/latest/api.html
 
 Every module in order to work with the bot must import it into the file: `from client import client`  
 Importing the `discord` module is also highly recommended as it allows you to use typing and embeds and other features
@@ -124,11 +128,11 @@ The framework allows modules to also parse every message running through the bot
 messages that trigger commands, and are run before commands are. To add a message handler a coroutine must be created 
 with a single argument `message` (type `discord.Message`), and the function must be decorated with `@client.message()`. 
 The decorator takes one argument `receive_self` (type `bool`) that defines whether this function will be activated for 
-the bot's own messages, and it defaults to `True`.
+the bot's own messages, and it defaults to `False`.
 
 For example:
 ```python
-@client.message()  # receive_self argument omitted; defaults to True
+@client.message()  # receive_self argument omitted; defaults to False
 async def react(message: discord.Message):
 	# your code here...
 ```
@@ -166,7 +170,7 @@ initially starts up, and won't be run if discord.py disconnects and must reconne
 
 Likewise, a coroutine can also be run when the bot is exited through a command. This can be useful for saving persistent-state
 information to a file, though it means modules that rely on this must then exit the bot through the shutdown procedure
-(by calling `client.on_shutdown()`).
+(by calling `client.do_shutdown()` from some command).
 
 For example:
 ```python
